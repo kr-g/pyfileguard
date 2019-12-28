@@ -15,6 +15,8 @@ there are some typical use cases, such as:
 - when wrting changed config files from your code (falls back to old state)
 - when randomly accessing larger files in binary mode
 
+find some [sample.py](https://github.com/kr-g/pyfileguard/blob/master/sample.py) code in github repo
+
 
 # code for small files
 
