@@ -6,7 +6,8 @@ support for large files provide access via `seek()` to a specific file position.
 
 # use in own code
 
-use `with context` and `rollback()` to rewind the changes done.
+use `with context` and `rollback()` to rewind the changes done. exiting the context without raising an error or closing the file will commit the changes to the file finally.
+
 
 # when to use in own code
 
