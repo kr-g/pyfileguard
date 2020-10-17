@@ -120,6 +120,7 @@ def sample3():
     # open existing bim and rollback changes
 
     with LargeFileGuard("monty.txt","r+",
+                            bimfile = "monty.txt.bim", # external bim file name
                             always_restore=False,
                             #keep_bim=True,
                             blksize=512,
