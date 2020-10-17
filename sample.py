@@ -1,7 +1,7 @@
 
 import os
 import shutil
-from fileguard import FileGuard, LargeFileGuard, dumpbim
+from fileguard import FileGuard, LargeFileGuard, GuardJournal, dumpbim
 
 
 def sample():
@@ -129,6 +129,46 @@ def sample3():
         f.rollback()
 
 
+def sample4():
+    
+    # copy test file
+    shutil.copy2("monty.bak.txt","monty.txt")
+
+    try:
+
+        with GuardJournal(debug=True) as gj:
+            
+            with LargeFileGuard("monty.txt","r+",
+                                    always_restore=False,
+                                    keep_bim=True, # with fileguard always open with True!
+                                    blksize=512,
+                                    debug=True,
+                                ) as f:
+                
+                # add largefileguard to journal
+                gj.add(f)
+                
+                print("before write",f)
+                f.write("!!! new content at 0 !!!")
+                f.seek(100)
+                f.write("!!! new content at 100 !!!")
+                f.seek( 0, 2 )
+                f.write("!!! new ending !!!")
+                f.flush()
+                print("after write",f)
+                
+                f.seek(0)
+                c = f.read()
+                print(c)
+                
+            # not in with scope above
+            # comment out to commit
+            raise Exception("something went wrong")
+            
+    except Exception as ex:
+        print(ex)
+
+
 def compare():
     with open("monty.bak.txt","rb") as f:
         old_content = f.read()
@@ -140,6 +180,7 @@ def compare():
 if __name__=='__main__':
     #sample()
     #sample2()
-    sample3()
+    #sample3()
+    sample4()
     print("eq:", compare() )
     

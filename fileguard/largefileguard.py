@@ -33,7 +33,7 @@ class LargeFileGuard():
         
     def _print_d(self,*args):
         if self.debug:
-            print(*args)
+            print(self.__class__.__name__,*args)
             
     def __enter__(self):
         self._print_d("__enter__")
