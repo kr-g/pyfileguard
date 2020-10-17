@@ -17,7 +17,7 @@ class GuardJournal(object):
             fs = os.stat(self.fnam)
             # if guard summery exists do a rollback
             self.rollback( self._read() )
-            self.close()
+            #self.close()
             
         except:
             pass
@@ -32,9 +32,6 @@ class GuardJournal(object):
         lines = cont.splitlines()
         #lines = list(filter( lambda x : len(x)>0 and x[0]!="#", lines ))
         bim_files = list(map( lambda x : l.split("\t"), lines ))
-        #for l in lines:
-        #    fnam, bim_file = l.split("\t")
-        #    bim_files.append( (fnam, bim_file) )
         self._print_d( "found", bim_files )
         return bim_files
 

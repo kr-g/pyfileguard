@@ -161,7 +161,9 @@ def sample4():
                 c = f.read()
                 print(c)
                 
-            # not in with scope above
+                print( dumpbim("monty.txt") )
+     
+           # not in with scope above
             # comment out to commit
             raise Exception("something went wrong")
             
