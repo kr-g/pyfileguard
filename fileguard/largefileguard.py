@@ -104,6 +104,7 @@ class LargeFileGuard():
         
     def flush(self):
         self.fd.flush()
+        os.fsync(self.fd.fileno())
         
     def read(self,size=None):
         return self.fd.read(size)
