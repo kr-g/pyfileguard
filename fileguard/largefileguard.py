@@ -13,20 +13,21 @@ SEG_MAGIC = 0xdeadbeef
 
 class LargeFileGuard():
     
-    def __init__(self,fnam,mode="r",always_restore=False,debug=False
-                 ,blksize=512,keep_bim=False,**kwargs):
+    def __init__(self,fnam,mode="r",always_restore=False,debug=False,
+                 bimfile=None,blksize=512,keep_bim=False,**kwargs):
         self.fnam = fnam
         self.fd = None
         self.flen = None
         self.mode = mode
         self.kwargs = kwargs
         self.bimfd = None
-        self.bimfile = None
+        self.bimfile = bimfile
         self.keep_bim = keep_bim
         self.debug = debug
         self.blksize = blksize
         self.always_restore = always_restore
         
+        self.already_exist = False
         self.binary = self.mode.find("b")>=0
         
         
@@ -79,11 +80,21 @@ class LargeFileGuard():
         self.flen = os.path.getsize( self.fnam )        
         self.fd = open(self.fnam,mode)
         
-        self.bimfile = self.fnam + ".bim"
-        self.bimfd = open( self.bimfile, "+wb" )
-
-        buf = self._pack( SEG_FORMT, self.flen, SEG_MAGIC, SEG_MAGIC )
-        self._writebim(buf)
+        if self.bimfile==None:
+            self.bimfile = self.fnam + ".bim"
+        
+        try:
+            fs = os.stat(self.bimfile)
+            self.already_exist = True
+            self.bimfd = open( self.bimfile, "+rb" )
+            # append to end
+            self.bimfd.seek(0,os.SEEK_END)
+        except:
+            # file dont exist
+            self.bimfd = open( self.bimfile, "+wb" )
+            # init file structure
+            buf = self._pack( SEG_FORMT, self.flen, SEG_MAGIC, SEG_MAGIC )
+            self._writebim(buf)
         
     def seek(self,offset, whence=0):
         return self.fd.seek(offset, whence)
@@ -130,7 +141,7 @@ class LargeFileGuard():
         
         if self.fd and self.bimfd:
             
-            blen = self.bimfd.seek(0,2)
+            blen = self.bimfd.seek(0,os.SEEK_END)
             bpos = blen - SEG_SIZE
             
             while bpos > SEG_SIZE:

@@ -38,3 +38,10 @@ in error case or by calling `rollback()` the changes are rewinded.
 refer to `sample2()`
 
 
+## code for belated rollback
+
+in case the rollback of an existing bim file needs to be done at a later point of time
+
+refer to `sample3()`
+
+
