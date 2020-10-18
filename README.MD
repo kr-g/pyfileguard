@@ -16,7 +16,7 @@ there are some typical use cases, such as:
 - when writing changed config files from your code (falls back to old state)
 - when randomly accessing larger files in binary mode
 
-find some [sample.py](https://github.com/kr-g/pyfileguard/blob/master/sample.py) code in github repo
+find some [`sample.py`](https://github.com/kr-g/pyfileguard/blob/master/sample.py) code in github repo
 
 
 # code for small files
@@ -43,5 +43,12 @@ refer to `sample2()`
 in case the rollback of an existing bim file needs to be done at a later point of time
 
 refer to `sample3()`
+
+
+## code for multiple file rollback
+
+in case rollback multiple files is needed - even if some files are already commited -
+
+refer to `sample4()`, and `sample5()`
 
 
